@@ -9,16 +9,23 @@ const client = createClient({
   apiVersion: "2024-02-14",
 });
 
+export const metadata = {
+  title: "Ihshan | Lead Developer 2026",
+  description: "Specializing in custom-coded eCommerce and Headless CMS architectures.",
+};
+
+
+
 const builder = imageUrlBuilder(client);
 function urlFor(source: any) {
   return builder.image(source);
 }
 
 export default async function Home() {
-  const profile = await client.fetch(`*[_type == "profile"][0]`);
-  const skills = await client.fetch(`*[_type == "skill"] | order(level desc)`);
-  const projects = await client.fetch(`*[_type == "project"]`);
-  const hobbies = await client.fetch(`*[_type == "hobby"]`);
+  const profile = await client.fetch(`*[_type == "profile"][0]`, {}, { next: { revalidate: 60 } });
+  const skills = await client.fetch(`*[_type == "skill"] | order(level desc)`, {}, { next: { revalidate: 60 } });
+  const projects = await client.fetch(`*[_type == "project"]`, {}, { next: { revalidate: 60 } });
+  const hobbies = await client.fetch(`*[_type == "hobby"]`, {}, { next: { revalidate: 60 } });
 
   return (
     <main className="min-h-screen w-full bg-[#020617] text-slate-200 selection:bg-cyan-500/30 selection:text-cyan-200 scroll-smooth">
